@@ -51,50 +51,52 @@ public class DAO {
      * ensemble des différents produits commandés
      */
     public Set<Produit> produits() {
-        return commandes.stream()
-                .flatMap(c -> c.lignes().stream())
-                .map(Paire::fst)
-                .collect(Collectors.toSet());
-
-                /**
-        Set<Produit> sp = new HashSet<Produit>() ;
+        Set<Produit> rtr = new HashSet<Produit>() ;
         for(int i = 0 ; i < commandes.size() ; i++) {
-            commandes.get(i).lignes().forEach(cl -> {
-                sp.add(cl) ;
+            commandes.get(i).lignes().forEach(cl -> { rtr.add(cl) ;
             });
 
         };
-        return sp ;
-         */
+
+        return rtr;
+    }
+
+        /*return commandes.stream()
+                .flatMap(c -> c.lignes().stream())
+                .map(Paire::fst)
+                .collect(Collectors.toSet());*/
     }
 
     /**
      * liste des commandes vérifiant un prédicat
      */
     public List<Commande> selectionCommande(Predicate<Commande> p) {
-        return commandes.stream()
+        List<Commande rtr = new ArrayList<>();
+        for(Commande c: commandes){
+            if(p.test(c)){
+                rtr.add(c);
+            }
+        }
+        return rtr;
+
+        /*return commandes.stream()
             .filter(p)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
     }
 
     /**
      * liste des commandes dont au moins une ligne vérifie un prédicat
      */
     public List<Commande> selectionCommandeSurExistanceLigne(Predicate<Paire<Produit,Integer>> p) {
-        return commandes.stream()
-            .filter(c -> c.lignes().stream().anyMatch(p))
-            .collect(Collectors.toList());
-    }
 
-            /**
-        List<Commande> lc = new ArrayList<Commande>();
-        commandes.forEach(c -> {
-            if(p.test(c)){
-                lc.add(c) ;
-            }
+        List<Commande> rtr = new ArrayList<Commande>();
+        commandes.forEach(x -> {
+                if(p.test(x)){
+                lc.add(x) ;
+                }
         });
-        return lc ;
-         */
+                return rtr ;
+}
 
     /**
      * ensemble des différents produits commandés vérifiant un prédicat
