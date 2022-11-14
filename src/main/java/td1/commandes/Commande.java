@@ -23,15 +23,15 @@ public class Commande<T> {
     public List<Paire<Produit, Integer>> lignes() {
         return lignes;
     }
+    private static final Function<Paire<Produit, Integer>, String> formateurLigne = l-> String.format("%s %d",  l.fst(), l.snd());
 
     @Override
+
     public String toString() {
         return lignes.stream()
                 .map(l -> formateurLigne.apply(l))
                 .collect(Collectors.joining());
     }
-
-    private static final Function<Paire<Produit, Integer>, String> formateurLigne = l-> String.format("%s %d",  l.fst(), l.snd());
 
     /**
      * cumule les lignes en fonction des produits
@@ -68,14 +68,15 @@ public class Commande<T> {
         str.append(HLINE);
         str.append("+ nom        + prix       + qté + prix ht    + tva    + prix ttc   +\n");
         str.append(HLINE);
-        /*for (Paire<Produit, Integer> ligne : c.lignes) {
+
+        for (Paire<Produit, Integer> ligne : c.lignes) {
             str.append(String.format("+ %10s + %10.2f + %3d + %10.2f + %5.2f%% + %10.2f +\n", ligne.fst(), // nom
                     ligne.fst().prix(), // prix unitaire
                     ligne.snd(), // qté
                     ligne.fst().prix() * ligne.snd(), // prix ht
                     ligne.fst().cat().tva() * 100, // tva
                     calculLigne.apply(ligne)));
-        }*/
+        }
         str.append(HLINE);
         str.append(String.format("Total : %10.2f", c.cout(calculLigne)));
         return str.toString();
